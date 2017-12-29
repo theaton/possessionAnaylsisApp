@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>Offensive Team</h4>
+			<select name="Teams" size="2" id="offense">
+				<option value="Oklahoma City Thunder">1 Thunder</option>
+				<option value="Golden State Warriors">2 Warriors</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<h4>Home Team Players</h4>
+			<select name="Players" size="5" id="homePlayers">
+				<option value="Russell Westbrook">1 Russell Westbrook</option>
+				<option value="Andre Roberson">2 Andre Roberson</option>
+				<option value="Paul George">3 Paul George</option>
+				<option value="Carmelo Anthony">4 Carmelo Anthony</option>
+				<option value="Steven Adams">5 Steven Adams</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<h4>Away Team Players</h4>
+			<select name="Players" size="5" id="awayPlayers">
+				<option value="Steph Curry">1 Steph Curry</option>
+				<option value="Klay Thompson">2 Klay Thompson</option>
+				<option value="Kevin Durant">3 Kevin Durant</option>
+				<option value="Draymond Green">4 Draymond Green</option>
+				<option value="Zaza Pachulia">5 Zaza Pachulia</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<h4>Outcome</h4>
+			<select name="Outcomes" size="4" id="outcome">
+				<option value="Made 2">1 Made 2</option>
+				<option value="Missed 2">2 Missed 2</option>
+				<option value="Made 3">3 Made 3</option>
+				<option value="Missed 3">4 Missed 3</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<!-- <form method="post"> -->
+				<h4>Game Clock</h4>
+				<input type="text" id="gameTime">
+				<input type="button" hidden id="submit" onclick="addToTable()">
+			<!-- </form> -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" id="displayInfo" style="height:300px; overflow-y:auto;">
+			<ul id="possessionList" style="list-style-type:circle"></ul>
+
+			<table class="table table-striped" id="possessionTable">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Offense</th>
+						<th>Offensive Player</th>
+						<th>Defensive Player</th>
+						<th>Outcome</th>
+					</tr>
+				</thead>
+				<tbody id="tableDisplay">
+				<tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h3>Screen Types</h3>
+			<ol>
+				<li>Pindown</li>
+				<li>Drag</li>
+				<li>Double Drag</li>
+				<li>Step Up</li>
+			</ol>
+		</div>
+		<div class="col-sm-2">
+			<h3>Shot Types</h3>
+				<ol>
+					<li>Spotup Jumper</li>
+					<li>Pullup Jumper</li>
+					<li>Layup</li>
+					<li>Dunk</li>
+					<li>Floater/Runner</li>
+				</ol>
+		</div>
+		<div class="col-sm-2">
+			<h3>Away Players</h3>
+				<ol>
+					{% for player in team.team_roster %}
+						{% if team == game.home_team %}
+                    		<li>{{ player }}</li>
+						{% endif %}
+        			{% endfor %}
+				</ol>
+		</div>
+		<div class="col-sm-2">
+			<h3>Home Players</h3>
+				<ol>
+					{% for team in teams %}
+							{% for player in game.home_team_roster %}
+								<li>{{ player }}</li>
+							{% endfor %}
+					{% endfor %}
+				</ol>
+		</div>
+	</div>
+</div>
+
+<script>
+function addToList() {
+	var ul = document.getElementById("possessionList");
+	var log = document.getElementById("gameTime");
+	var li = document.createElement("li");
+	li.setAttribute('id', log.value);
+	li.appendChild(document.createTextNode(log.value));
+	ul.appendChild(li);
+}
+
+function addToTable() {
+	var table = document.getElementById("tableDisplay");
+    var row = table.insertRow(0);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+	var cell3 = row.insertCell(2);
+	var cell4 = row.insertCell(3);
+	var cell5 = row.insertCell(4);
+
+	var gameTime = document.getElementById("gameTime");
+	var offense = document.getElementById("offense");
+	var homePlayer = document.getElementById("homePlayers");
+	var awayPlayer = document.getElementById("awayPlayers");
+	var outcome = document.getElementById("outcome");
+
+    cell1.innerHTML = gameTime.value;
+	cell2.innerHTML = offense.value;
+	cell3.innerHTML = homePlayer.value;
+	cell4.innerHTML = awayPlayer.value;
+	cell5.innerHTML = outcome.value;
+}
+
+$("#gameTime").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#submit").click();
+		$("#gameTime").val('');
+		$("#offense").val('');
+		$("#homePlayers").val('');
+		$("#awayPlayers").val('');
+		$("#outcome").val('');
+    }
+});
+
+//document.getElementById('log').style.width="200px";
+//document.getElementById('log').style.height="200px";
+//document.getElementById('log').style.fontSize="14pt";
+</script>
+</body>
+</html>
